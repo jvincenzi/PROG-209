@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- Joseph Vincenzi -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Project 3- Time Bomb Panic</title>
+		<style>
+			#instructions{
+				position: absolute;
+				float: left;
+				width: 768px;
+				height: 576px;
+				text-align:center;
+				z-index: 100;
+				color: white;
+			}
+			#lv2screen{
+				display: none;
+				position: absolute;
+				float: left;
+				width: 768px;
+				height: 576px;
+				text-align:center;
+				z-index: 101;
+				color: white;
+			}
+			canvas{
+				position: absolute;
+				float: left;
+			}
+			h1{
+				font-size:320%;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="instructions">
+			<br>
+			<br>
+			<h1>Bovine Abduction</h1>
+			<h3>Welcome to the cow abductor!</h3>
+			<p>You are on a mission of great importance!
+				<br>It is your job as an alien to abduct as many
+				<br>cows as possable. Without being detected you
+				<br>must bring them back to your home world.
+				<br>Do this as quiclky as possable so you don't
+				<br>get cault by any humans.<br>
+				<br>Once you have abducted all the cows
+				<br>run back to your spaceship and fly back
+				<br>to your home plannet.
+			</p>
+			<button id="btn" autofocus style="margin:50px auto 0px auto">Start the game!</button> 
+		</div>
+		
+		<div id="lv2screen">
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<h2>That's a good start but you need to collect more cows!</h2>
+			<br><br>
+			<button id="btn2" autofocus style="margin:50px auto 0px auto">Play Level 2</button>
+		</div>
+		
+		<canvas width="768" height="576"> <!-- canvas width="500" height="500" are NOT CSS!!!!!! default is 300w 150h-->
+			No canvas 4 you!
+		</canvas>
+    
+    
+    
+    <audio id="moo" src="../audio/MOO.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="motherShip" src="../audio/thirdKind2.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="music" src="../audio/Alien_Abduction_Music.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="warpSound" src="../audio/warpNext.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    
+		
+		
+    
+    <!-----------------------<script>--------------------------->
+    <!--< /* jshint browser:true, devel:true, esversion:6 */ >-->
+    <script src="../src/objects.js"></script>
+	<script src="../src/collision.js"></script>
+	<script src="../src/js.js"></script>
+	<script>
+  
+      
+      
+	</script>
+	</body>
+</html>
+	
+

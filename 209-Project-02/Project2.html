@@ -1,0 +1,943 @@
+<!doctype html>
+<!-- Joseph Vincenzi -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Project 2: Tile Based Game</title>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link href="https://fonts.googleapis.com/css?family=MedievalSharp" rel="stylesheet"> 
+		<style>
+      #title{
+        text-align: center;
+        width: 797px;
+        padding: 0px 5px;
+        background-color: rgb(192,192,192);
+        font-family: 'MedievalSharp', cursive;
+      }
+			#gameContainer{
+        background-color: rgb(192,192,192);
+        padding:5px 0px 0px 20px;
+        width: 829px;
+        margin: 0px auto 0px auto;
+      }
+      
+      #con{
+        position: relative;
+        width: 777px;
+        height: 777px;
+        float:left;
+      }
+      .cell{
+				position: absolute;
+				width: 96px;
+				height: 96px;
+				border: 1px dashed grey;
+				background-color: rgb(192,192,192);
+			}
+      
+      #screen0{
+        position: relative;
+				width: 777px;
+				height: 777px;
+        float:left;
+        display: block;
+        text-align:center;
+        background-image: url("images/labyrinthDoor.jpg");
+      }
+      #screen1{
+        position: relative;
+				width: 777px;
+				height: 777px;
+        float:left;
+        display: none;
+        text-align:center;
+        background-color: rgb(51,102,153);
+        background-image: url("images/minotaur-tastethebeast.jpg");
+      }
+      #screen2{
+        position: relative;
+				width: 727px;
+				height: 757px;
+        float:left;
+        display: none;
+        padding: 10px 25px;
+        text-align:center;
+        font-size:120%;
+        font-family: 'MedievalSharp', cursive;
+        background-color: rgb(255,255,204);
+      }
+      #board{
+				position: relative;
+        width: 777px;
+        height: 777px;
+        float:left;
+        display: none;
+			}
+      #screenEnd{
+        position: relative;
+				width: 777px;
+				height: 777px;
+        float:left;
+        display: none;
+        background-image: url("images/youLose.jpg");
+        
+        
+        text-align:center;
+        font-family: 'MedievalSharp', cursive;
+        color:red;
+        
+      }
+      h1{
+        font-size:700%;
+      }
+      
+      #northBoarder{
+        width: 809px;
+				height: 50px;
+        background-image: url("images/northBoarder.jpg");
+      }
+      #southBoarder{
+        width: 809px;
+				height: 50px;
+        clear:both;
+        background-image: url("images/southBoarder.jpg");
+      }
+      #leftBoarder{
+        width: 16px;
+        height: 777px;
+        float: left;
+        background-image: url("images/leftBoarder.jpg");
+      }
+      #rightBoarder{
+        width: 16px;
+        height: 777px;
+        float: left;
+        background-image: url("images/rightBoarder.jpg");
+      }
+      #textOut{
+        width: 797px;
+        height: 95px;
+        padding: 5px;
+        font-size:18px;
+        font-family: 'MedievalSharp', cursive;
+        background-color: rgb(192,192,192);
+      }
+      #dirLeftImg{
+        width:76px;
+        height:;
+        float:left;
+      }
+      #dirRightText{
+        text-align: left;
+        width:640px;
+        height:420px;
+        float:left;
+      }
+      
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="gameContainer">
+      <div id="title"></div>
+      <div id="northBoarder"></div>
+      <div id="leftBoarder"></div>
+      <div id="con">
+        <div id="screen0">
+          <button type="button" autofocus onclick="nextScreen()" style="margin:400px auto 0px auto">Play Game</button>
+        </div>
+        <div id="screen1">
+          <button type="button" autofocus onclick="nextScreen()" style="margin:730px auto 0px auto">Click to continue</button>
+        </div>
+        <div id="screen2">
+          <p><strong>Over the years many adventures have entered the Minotaur’s Labyrinth in an effort to kill the
+          Minotaur. Their quests for glory and riches have always failed and the Minotaur has gotten richer from the gold of each failed
+          adventurer. The evil Minotaur has been hoarding the land's
+          gold for years, not leaving enough for the town's economy to thrive. You have
+          decided to enter the Minotaur’s Labyrinth in order to steal the treasure. Your goal is to steal the
+          treasure and make it to the red teleportation seal without getting spotted by the Minotaur. The teleportation seal will appear once you have
+          collected the treasure. But watch out: once you have the treasure the Minotaur will become enraged and
+          chase after you. Most adventurers have set out to kill the Minotaur but you know that the
+          labyrinth is enchanted so that the Minotaur cannot die within its walls.</strong></p>
+          
+          <div id="dirLeftImg">
+            <img src="images/pc_small.jpg"><br>
+            <img src="images/minotaur_small.jpg"><br>
+            <img src="images/eDrink_small.jpg"><br>
+            <img src="images/statue_small.jpg"><br>
+            <img src="images/teleporter_small.jpg"><br>
+            <img src="images/treasureChest_small.jpg">
+          </div>
+          <div id="dirRightText">
+            <br>
+            <p style="display:inline"><strong>Our brave hero. </strong></p><br><br><br>
+            <p style="display:inline"><strong>The Minotaur, can't be killed while in the labyrinth. </strong></p><br><br><br>
+            <p style="display:inline"><strong>Energy Potion, increases strenght & health. </strong></p><br><br><br>
+            <p style="display:inline"><strong>Gargoyle statue, immoveable and blocks your path.</strong></p><br><br><br>
+            <p style="display:inline"><strong>Teleportation seal, use this to escape the labyrinth.</strong></p><br><br><br>
+            <p style="display:inline"><strong>The Minotaur’s treasure chest, collect this and escape the labyrinth.</strong></p><br><br>
+          </div>
+          <button type="button" autofocus onclick="nextScreen()" style="margin:2px auto 0px auto">Enter the Labyrinth</button>
+        </div>
+        <div id="board"></div>
+        <div id="screenEnd">
+          <button type="button" autofocus onclick="nextScreen()" style="margin:730px auto 0px auto">Play again</button>
+        </div>    
+      </div>
+      <div id="rightBoarder"></div>
+      <div id="southBoarder"></div>
+      <div id="textOut"></div>
+    </div>
+    
+    <audio id="eDrinkID" src="audio/minotaurPowerUp.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="winID" src="audio/victory.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="lootID" src="audio/treasure.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="combatID" src="audio/combat2.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    <audio id="combatID2" src="audio/combat_.mp3" autostart="false" type="audio/mpeg" enablejavascript="true"></audio>
+    
+    
+    <!-----------------------<script>-------------------------->
+    <script>
+      window.addEventListener("load", drawGB);
+      
+      let textOut = document.getElementById("textOut"); // textOut.innerHTML = "";
+      let output = document.querySelector("#board");
+      let title = document.querySelector("#title");
+      window.addEventListener("keydown", keyHandler, false);
+      
+			const MAX_BOARD_SIZE = 8; // 8 x 8
+      let gameBoard = [ 
+        [2,0,0,0,0,0,0,4],// for second monster replace the line on the feft with this 2,0,0,0,7,0,0,4 
+        [0,0,2,0,0,0,2,0],
+        [0,0,0,3,0,0,0,0],
+        [2,0,0,0,7,0,0,2],
+        [0,0,0,0,0,0,0,0], 
+        [0,0,0,0,3,0,0,0],
+        [0,2,0,0,0,2,0,0],
+        [1,0,0,0,0,0,0,2]
+      ];
+      
+      const EMPTY_TILE  = 0;
+      const PC_TILE     = 1;
+      const STATUE_TILE = 2;
+      const E_DRINK_TILE= 3;
+      const TREASURE_TILE= 4; 
+      const TELEP_TILE  = 5; 
+      const CORPSE_TILE = 6; 
+      const M1_TILE     = 7;
+      
+			const CELLWIDTH = 96; // Tile size (x)
+      const CELLHEIGHT = 96;// Tile size (y)
+			const SPACE = 1;
+			const ROWS = gameBoard.length;
+			const COLUMNS = gameBoard[0].length;
+      
+      let chance2Charge = 9; /* chance2Charge must be set to 4 or greater, 4 = random monster movement,
+        5 or greater monster will move toward the player. higher numbers increase the likelyhood that the
+        monster will move tward the player.
+        Set to 9-12 for a medium difficulty game.
+        Set to 15-24 for hard and set to 30+ for beast mode.
+        */
+      let pcLocR = 7; // y coordinate for player
+      let pcLocC = 0; // x coordinate for player
+      let lastTile = TELEP_TILE;
+			let playerHealth = 10; // eg player hit points
+			let playerStrength = 10;
+      let playerAC = 5;
+      let pcGold = 78;
+      let monsterLastTile = EMPTY_TILE;
+      let holdMonster = false;
+      let holdMonster2x = false;
+      
+      let m1LocR = 3; // y coordinate for monster #1
+      let m1LocC = 4; // x coordinate for monster #1
+      //let monster1AC = 7;
+      let monster1Str = 15;
+      let minotaurPowerUp = false;
+      
+      //let m2LocR = 0; // y coordinate for monster #2
+      //let m2LocC = 4; // x coordinate for monster #2
+      //let monster2AC = 7;
+      //let monster2Str = 15;
+      
+      let lootCollected = false;
+      let endGame = false; // used to end the game win or lose
+			let screen = 0; // used to track what screen is being displayed to the user. intro, sponsor message, directions/story, game play, gameover screen.
+      // once the game is over if the user wants to play again the game will go to screen 1 not 0 this is by design!
+      let alowArrows = false; // used to prevent moving the hero before game board is visable
+			let hasWon = false;
+      
+      
+
+      function resetGameData(){ 
+        gameBoard[m1LocR][m1LocC] = 0; // resets the last tile the monster was in the previous game to an empty tile
+        for(let row =0; row < ROWS; row++){
+          for(let column = 0; column < COLUMNS; column++){
+            // nested switch stastments reset game board
+            switch(row){
+              case 0:
+                switch(column){
+                  case 0:
+                    gameBoard[row][column] = 2;
+                    break;
+                  case 7:
+                    gameBoard[row][column] = 4;
+                    break;
+                }
+                break;
+              case 1:
+                switch(column){
+                  case 2:
+                    gameBoard[row][column] = 2;
+                    break;
+                  case 6:
+                    gameBoard[row][column] = 2;
+                    break;
+                }
+                break;
+              case 2:
+                switch(column){
+                  case 3:
+                    gameBoard[row][column] = 3;
+                    break;
+                }
+                break;
+              case 3:
+                switch(column){
+                  case 0:
+                    gameBoard[row][column] = 2;
+                    break;
+                  case 4:
+                    gameBoard[row][column] = 7;
+                    break;
+                  case 7:
+                    gameBoard[row][column] = 2;
+                    break;
+                }
+                break;
+              //case 4:
+                //break;
+              case 5:
+                switch(column){
+                  case 4:
+                    gameBoard[row][column] = 3;
+                    break;
+                }
+                break;
+              case 6:
+                switch(column){
+                  case 1:
+                    gameBoard[row][column] = 2;
+                    break;
+                  case 5:
+                    gameBoard[row][column] = 2;
+                    break;
+                }
+                break;
+              case 7:
+                switch(column){
+                  case 0:
+                    gameBoard[row][column] = 1;
+                    break;
+                  case 7:
+                    gameBoard[row][column] = 2;
+                    break;
+                }
+                break;
+            }
+          }
+        }
+        // reset game variables
+        pcLocR = 7; 
+        pcLocC = 0;
+        lastTile = TELEP_TILE;
+        playerHealth = 10;
+        playerStrength = 10;
+        playerAC = 5;
+        pcGold = 78;
+        monsterLastTile = EMPTY_TILE;
+        holdMonster = false;
+        holdMonster2x = false;
+        m1LocR = 3;
+        m1LocC = 4;
+        monster1Str = 15;
+        chance2Charge = 9;
+        lootCollected = false;
+        endGame = false; 
+        alowArrows = false; 
+        hasWon = false;
+        minotaurPowerUp = false;
+      }
+      
+      function nextScreen(){ 
+        // this function handles displaying and hiding the 5 game screens. intro, advert, directions/story, game, game over.
+        // Once a game has been played and the player choose to play again the intro screen will be sliped. this is by design.
+        if(screen >= 4){
+          screen = 1;
+        }else{
+          screen++;
+        }
+        if(screen === 0){
+          document.getElementById("screen0").style.display = "block"; // makes the intro screen visable
+          document.getElementById("screen1").style.display = "none"; // hidden
+          document.getElementById("screen2").style.display = "none"; // hidden
+          document.getElementById("board").style.display = "none"; // hidden
+          document.getElementById("screenEnd").style.display = "none"; // hidden
+        }else if(screen === 1){
+          document.getElementById("screen0").style.display = "none";
+          document.getElementById("screen2").style.display = "none";
+          document.getElementById("board").style.display = "none";
+          document.getElementById("screenEnd").style.display = "none";
+          document.getElementById("screen1").style.display = "block"; // makes the sponsor's message screen visable
+          playEDrink();
+          resetGameData();
+        }else if(screen === 2){
+          document.getElementById("screen0").style.display = "none";
+          document.getElementById("screen1").style.display = "none";
+          document.getElementById("screen2").style.display = "block"; // makes the game directions and story screen visable
+          document.getElementById("board").style.display = "none";
+          document.getElementById("screenEnd").style.display = "none";
+        }else if(screen === 3){
+          alowArrows = true;
+          document.getElementById("screen0").style.display = "none";
+          document.getElementById("screen1").style.display = "none";
+          document.getElementById("screen2").style.display = "none";
+          document.getElementById("board").style.display = "block"; // makes the Game Board screen visable
+          document.getElementById("screenEnd").style.display = "none";
+        }else if(screen === 4){
+          document.getElementById("screen0").style.display = "none";
+          document.getElementById("screen1").style.display = "none";
+          document.getElementById("screen2").style.display = "none";
+          document.getElementById("board").style.display = "none";
+          document.getElementById("screenEnd").style.display = "block"; // makes the game over screen visable
+          
+        }
+        drawGB();
+      }
+      
+      function drawGB(){ 
+        // draw game board.
+        if(screen == 0){ // intro
+          title.innerHTML = "<h2>Escape The Minotaur's Labyrinth</h2>";
+        }else if(screen == 1){ // advert
+          title.innerHTML = "<h2>A word from our sponsor...</h2>";
+        }else if(screen == 2){ // directions/story
+          title.innerHTML = "<h2>How to play</h2>";
+        }else if(screen == 3){ // game
+          title.innerHTML = "<h2>Player Health: <span style='color:red'>" + playerHealth +
+                           "</span>, Strength: <span style='color:red'>" + playerStrength +
+                           "</span>, Gold: <span style='color:yellow'>" + pcGold + "</span></h2>";
+          
+          for(let row = 0; row < ROWS; row++){ // looping through rows
+            for(let column = 0; column < COLUMNS; column++){ // looping through colums
+              let cell = document.createElement("div");
+              cell.setAttribute("class", "cell"); // setting cell atributes
+              output.appendChild(cell);
+              if(gameBoard[row][column] === EMPTY_TILE){ //0 sets propper tile based on array[r][c] location
+                cell.style.backgroundImage = "url(images/floorTile.jpg)"; 
+              }else if(gameBoard[row][column] === PC_TILE){ //1
+                cell.style.backgroundImage = "url(images/pc.jpg)";
+              }else if(gameBoard[row][column] === STATUE_TILE){ //2
+                cell.style.backgroundImage = "url(images/statue.jpg)";
+              }else if(gameBoard[row][column] === E_DRINK_TILE){ //3 
+                cell.style.backgroundImage = "url(images/eDrink.jpg)";
+              }else if(gameBoard[row][column] === TREASURE_TILE){ //4
+                if(!lootCollected){
+                  cell.style.backgroundImage = "url(images/treasureChest.jpg)";
+                }else{
+                  cell.style.backgroundImage = "url(images/floorTile.jpg)";
+                }
+              }else if(gameBoard[row][column] === TELEP_TILE){ //5 
+                if(lootCollected){
+                  cell.style.backgroundImage = "url(images/teleporter.jpg)";
+                }else{
+                  cell.style.backgroundImage = "url(images/floorTile.jpg)";
+                }
+              }else if(gameBoard[row][column] === CORPSE_TILE){ //6 Not USED AT THIS TIME
+                cell.style.backgroundImage = "url(images/floorTile.jpg)"; 
+              }else if(gameBoard[row][column] === M1_TILE){ //7
+                cell.style.backgroundImage = "url(images/minotaur.jpg)";
+              }
+              cell.style.top = row * (CELLHEIGHT + SPACE) + "px";
+              cell.style.left = column * (CELLWIDTH + SPACE) + "px";
+            }
+          }
+        }else if(screen == 4){ // game over/cleanup
+          title.innerHTML = "<h2>Game over</h2>";
+          let endingScreen = document.getElementById("screenEnd");
+          if(hasWon){
+            // Player wins
+            endingScreen.style.backgroundImage = "url(images/endWin.jpg)";
+            playWin();
+          }else{
+            // Player lost
+            endingScreen.style.backgroundImage = "url(images/youLose.jpg)";
+            textOut.innerHTML = " The Minotaur has cault you and trampled you to death.";
+          }
+        }
+      }
+      
+      function runGame(obj, rowCol, num){ 
+        textOut.innerHTML = "";
+        canMove(obj, rowCol, num);
+        if(!hasWon){
+          monsterAIMove(1);
+          /*
+          if(minotaurPowerUp){ // lets the Minotaur move 2 times per turn. a bit unfair, and graphics get jumpy/glitchy.
+            monsterAIMove(1);
+          }
+          */
+          // monsterAIMove(2); // broken... uncoment this line for a second monster.
+        }
+        if(playerHealth <= 0){
+          hasWon = false;
+          endGame = true;
+        }
+        isGameOver();
+        drawGB();
+      }
+      
+      function canMove(obj, rowCol, num){ 
+        let nextTile = 0;
+        let monsterNumber = 1;
+        if(obj[0] == 'm'){
+          monsterNumber = Number(obj[1]);
+        }
+        if(obj == "pc"){ // prevents the Player form leaving the 8x8 game board
+          if(rowCol == "c"){
+            if(num == -1){
+              if(pcLocC > 0){ // prevents the player from moving off the game board
+                if(gameBoard[pcLocR][pcLocC-1] != STATUE_TILE){ // Stops player from moving through tile type #2
+                  nextTile = gameBoard[pcLocR][pcLocC-1]; // looks ahead at the next tile the player is moving to and saves a copy
+                  pcLocC -= 1; // moves player one tile to the left
+                  encounter("pc", pcLocR, pcLocC); // handles the outcome of moving to a tile
+                  gameBoard[pcLocR][pcLocC] = PC_TILE; // updates the array[r][c] with the location of the player
+                  gameBoard[pcLocR][pcLocC+1] = lastTile; // replaces the tile the player just move from with what type of tile was there before the player moved there
+                  lastTile = nextTile; // sets the last tile varible equal to what the tile was before the player moved on to it
+                }
+              }
+            }else{// num == +1
+              if(pcLocC < MAX_BOARD_SIZE-1){  // prevents the player from moving off the game board
+                if(gameBoard[pcLocR][pcLocC+1] != STATUE_TILE){ // Stops player from moving through tile type #2
+                  nextTile = gameBoard[pcLocR][pcLocC+1];
+                  pcLocC += 1;
+                  encounter("pc", pcLocR, pcLocC);
+                  gameBoard[pcLocR][pcLocC] = PC_TILE; 
+                  gameBoard[pcLocR][pcLocC-1] = lastTile;
+                  lastTile = nextTile;
+                }
+              }
+            }
+          }else if(rowCol == "r"){
+            if(num == -1){
+              if(pcLocR > 0){  // prevents the player from moving off the game board
+                if(gameBoard[pcLocR-1][pcLocC] != STATUE_TILE){ // Stops player from moving through tile type #2
+                  nextTile = gameBoard[pcLocR-1][pcLocC];
+                  pcLocR -= 1;
+                  encounter("pc", pcLocR, pcLocC);
+                  gameBoard[pcLocR][pcLocC] = PC_TILE;
+                  gameBoard[pcLocR+1][pcLocC] = lastTile;
+                  lastTile = nextTile;
+                }
+              }
+            }else{// num == +1
+              if(pcLocR < MAX_BOARD_SIZE-1){  // prevents the player from moving off the game board
+                if(gameBoard[pcLocR+1][pcLocC] != STATUE_TILE){ // Stops player from moving through tile type #2
+                  nextTile = gameBoard[pcLocR+1][pcLocC];
+                  pcLocR += 1;
+                  encounter("pc", pcLocR, pcLocC);
+                  gameBoard[pcLocR][pcLocC] = PC_TILE;
+                  gameBoard[pcLocR-1][pcLocC] = lastTile;
+                  lastTile = nextTile;
+                }
+              }
+            }
+          }
+        }else if(obj[0] == "m"){ // code for preventing the Monster form leaving the 8x8 game board
+          let monsterNextTile = 0;
+          if(monsterNumber == 1){
+            if(rowCol == "c"){ // moves monster column
+              if(num == -1){
+                if(m1LocC > 0){
+                  if(gameBoard[m1LocR][m1LocC-1] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m1LocR][m1LocC-1];
+                    if(monsterNextTile == PC_TILE){
+                      monsterNextTile = lastTile;
+                    }
+                    m1LocC -= 1; // moves monmster one space to the left
+                    encounter("m1", m1LocR, m1LocC);
+                    gameBoard[m1LocR][m1LocC] = M1_TILE; 
+                    gameBoard[m1LocR][m1LocC+1] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }else{// num == +1
+                if(m1LocC < MAX_BOARD_SIZE-1){
+                  if(gameBoard[m1LocR][m1LocC+1] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m1LocR][m1LocC+1];
+                    if(monsterNextTile == PC_TILE){
+                      monsterNextTile = lastTile;
+                    }
+                    m1LocC += 1; // moves monmster one space to the right
+                    encounter("m1", m1LocR, m1LocC);
+                    gameBoard[m1LocR][m1LocC] = M1_TILE;
+                    gameBoard[m1LocR][m1LocC-1] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }
+            }else if(rowCol == "r"){// moves monster row
+              if(num == -1){
+                if(m1LocR > 0){
+                  if(gameBoard[m1LocR-1][m1LocC] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m1LocR-1][m1LocC];
+                    if(monsterNextTile == PC_TILE){
+                      monsterNextTile = lastTile;
+                    }
+                    m1LocR -= 1;  // moves monmster one space up                  
+                    encounter("m1", m1LocR, m1LocC);
+                    gameBoard[m1LocR][m1LocC] = M1_TILE;
+                    gameBoard[m1LocR+1][m1LocC] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }else{// num == +1
+                if(m1LocR < MAX_BOARD_SIZE-1){
+                  if(gameBoard[m1LocR+1][m1LocC] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m1LocR+1][m1LocC];
+                    if(monsterNextTile == PC_TILE){
+                      monsterNextTile = lastTile;
+                    }
+                    m1LocR += 1;  // moves monmster one space down
+                    encounter("m1", m1LocR, m1LocC);
+                    gameBoard[m1LocR][m1LocC] = M1_TILE;
+                    gameBoard[m1LocR-1][m1LocC] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }
+            }
+          }else if(monsterNumber == 2){ // second monster movment same as above but for 2nd monster
+            
+            if(rowCol == "c"){ // moves monster column
+              if(num == -1){
+                if(m2LocC > 0){
+                  if(gameBoard[m2LocR][m2LocC-1] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m2LocR][m2LocC-1];
+                    m2LocC -= 1; // moves monmster one space to the left
+                    encounter("m2", m2LocR, m2LocC);
+                    gameBoard[m2LocR][m2LocC] = M1_TILE;
+                    gameBoard[m2LocR][m2LocC+1] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }else{// num == +1
+                if(m2LocC < MAX_BOARD_SIZE-1){
+                  if(gameBoard[m2LocR][m2LocC+1] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m2LocR][m2LocC+1];
+                    m2LocC += 1; // moves monmster one space to the right
+                    encounter("m2", m2LocR, m2LocC);
+                    gameBoard[m2LocR][m2LocC] = M1_TILE; 
+                    gameBoard[m2LocR][m2LocC-1] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }
+            }else if(rowCol == "r"){// moves monster row
+              if(num == -1){
+                if(m2LocR > 0){
+                  if(gameBoard[m2LocR-1][m2LocC] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m2LocR-1][m2LocC];
+                    m2LocR -= 1;  // moves monmster one space up                 
+                    encounter("m2", m2LocR, m2LocC);
+                    gameBoard[m2LocR][m2LocC] = M1_TILE; 
+                    gameBoard[m2LocR+1][m2LocC] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }else{// num == +1
+                if(m2LocR < MAX_BOARD_SIZE-1){
+                  if(gameBoard[m2LocR+1][m2LocC] != STATUE_TILE){ // Stops monster from moving through tile type #2
+                    monsterNextTile = gameBoard[m2LocR+1][m2LocC];
+                    m2LocR += 1;  // moves monmster one space down
+                    encounter("m2", m2LocR, m2LocC);
+                    gameBoard[m2LocR][m2LocC] = M1_TILE; 
+                    gameBoard[m2LocR-1][m2LocC] = monsterLastTile;
+                    monsterLastTile = monsterNextTile;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      // Play audio functions section
+      function playEDrink(){ // plays energy drink audio.mp3
+        let eDrink = document.getElementById("eDrinkID");
+        eDrink.play(); // plays the specifyed audio
+      }
+			function playLoot(){ // plays loot gold audio.mp3
+        let loot = document.getElementById("lootID");
+        loot.play();
+      }
+			function playWin(){ // plays win game audio.mp3
+        let win = document.getElementById("winID");
+        win.play(); 
+      }
+      function playCombat(){ // plays combat audio.mp3
+        let combat = document.getElementById("combatID");
+        combat.play(); 
+      }
+      function playCombat2(){ // plays player getting squished audio.mp3
+        let combat = document.getElementById("combatID2");
+        combat.play(); 
+      }
+			
+			function powerUp(obj){ 
+        if(obj == "pc"){
+          if(playerHealth >= 31){
+            playerHealth = 40;
+          }else if(playerHealth <= 30){
+            playerHealth += 10;
+          }
+          if(playerStrength > 15){
+            playerStrength = 20;
+          }else if(playerStrength <= 15){
+            playerStrength += 5;
+          }
+				}/*else{ // use for monster powerup but that would be unfair for the player so it is disabled
+					if(obj[1] === "1"){
+						monster1Str += 5;
+					}else if(obj[1] === "2"){
+						monster2Str += 5;
+					}
+				}
+        */
+			}
+      
+      function encounter(obj, r, c){ 
+        // handles what happend when the player moves to a new tile
+        if(obj == "pc"){
+          if(gameBoard[r][c] === E_DRINK_TILE){ //3 eDrink tile
+						powerUp(obj);
+            playEDrink();
+            textOut.innerHTML = "Taste the beast! Minotaur! You drink the Minotaur energy potion, you regain health and strength. "+
+              "Minotaur energy drinks are available in these fine retailers: Joseph's House of Potions and Orion's Belt Boutique.";
+          }else if(gameBoard[r][c] === TREASURE_TILE){ //4 treasure tile
+            if(!lootCollected){
+              pcGold += 1000;
+							textOut.innerHTML = "You have collected the Minotaur's treasure. You now have "+pcGold+
+                                  " gold coins. To win, you must escape the Minotaur's labyrinth by reaching the "+
+                                  "<span style='color:red'>teleportation seal</span> at the opposite corner of the labyrinth";
+              lootCollected = true;
+              playLoot();
+              chance2Charge += chance2Charge*2; // increase the difficulty now that the player has stolen the Minotaur's gold
+            }
+          }else if(gameBoard[r][c] === TELEP_TILE){ //5
+            if(lootCollected){
+              // end the game tht pc has won
+							textOut.innerHTML += " You have escaped the Minotaur's Labyrinth with the teasure and your life. The townspeople will "+
+                "sing songs of your heroic deeds for many generations to come.";
+              hasWon = true;
+              endGame = true;
+            }
+          //}else if(gameBoard[r][c] === CORPSE_TILE){ // unused at this time, was going to make squish sounds when player/monster walked on this tile
+          }else if(gameBoard[r][c] >= M1_TILE){ // 7 monster
+            // The player attacks Minotaur 
+            textOut.innerHTML = "You attack the Minotaur. You swing your sword furiously, cutting and slashing the Minotaur and finally driving"+
+              "your sword into the Minotaur's chest. The Minotaur falls to the ground... The Minotaur begins to glow and it's wounds begin to heal. "+
+              "The Minotaur's eyes open and the Minotaur gets up and looks at you.";
+            playCombat();
+            holdMonster = true; // stops the monster from moving for ONE round so the player has time to move away
+            holdMonster2x = true; // stops the monster from moving for a second round (used in conjunction with: holdMonster) 
+          }
+        }else{ // this is how the monster encounters things
+          if(gameBoard[r][c] === PC_TILE){ //7 monster
+            // The Minotaur attacks
+            textOut.innerHTML = "The Minotaur charges at you. You have no time to move out of the way. The Minotaur tramples you. You take 7 dammage.";
+            playCombat2();
+            holdMonster = true;
+            lastTile = M1_TILE;
+            playerHealth -=7;
+          }else if(gameBoard[r][c] === E_DRINK_TILE){ //3 eDrink tile
+						//powerUp(obj);
+            //playEDrink();
+            textOut.innerHTML = "Taste the beast! Minotaur! The Minotaur drinks an energy potion. Minotaur energy drinks are available in these "+
+              "fine retailers: Joseph's House of Potions and Orion's Belt Boutique.";
+            minotaurPowerUp = true;
+          }
+        }
+      }
+			
+      function pathFinder(monsterNumber){ 
+				//  rand #, 1=up, 2=right, 3=down, 4=left, 5 or higher the monster moves toward the player
+        let rand = Math.floor((Math.random() * chance2Charge)+1); 
+        let blocking = findObstacles(monsterNumber);
+        // the while loop findes a new direction to move if blocked
+        while(rand == blocking[0] || rand == blocking[2] || rand == blocking[3] || rand == blocking[4]){
+          rand = Math.floor((Math.random() * chance2Charge)+1);
+        }
+        return rand;
+      }
+      function findObstacles(monsterNumber){ 
+        let blockedNegY = 0;
+        let blockedPosX = 0;
+        let blockedPosY = 0;
+        let blockedNegX = 0;
+        if(monsterNumber == 1){
+          if(m1LocR-1 == -1 || gameBoard[m1LocR-1][m1LocC] == STATUE_TILE){ // find Obstacles up
+            blockedNegY = 1;
+          }
+          if(m1LocC+1 == 8 || gameBoard[m1LocR][m1LocC+1] == STATUE_TILE){ // find Obstacles right
+            blockedPosX = 2;
+          }
+          if(m1LocR+1 == 8 || gameBoard[m1LocR+1][m1LocC] == STATUE_TILE){ // find Obstacles down 
+            blockedPosY = 3;
+          }
+          if(m1LocC-1 == -1 || gameBoard[m1LocR][m1LocC-1] == STATUE_TILE){ // find Obstacles left
+            blockedNegX = 4;
+          }
+        }else if(monsterNumber == 2){
+          if(m2LocR-1 == -1 || gameBoard[m2LocR-1][m2LocC] == STATUE_TILE){ // find Obstacles up
+            blockedNegY = 1;
+          }
+          if(m2LocC+1 == 8 || gameBoard[m2LocR][m2LocC+1] == STATUE_TILE){ // find Obstacles right
+            blockedPosX = 2;
+          }
+          if(m2LocR+1 == 8 || gameBoard[m2LocR+1][m2LocC] == STATUE_TILE){ // find Obstacles down 
+            blockedPosY = 3;
+          }
+          if(m2LocC-1 == -1 || gameBoard[m2LocR][m2LocC-1] == STATUE_TILE){ // find Obstacles left
+            blockedNegX = 4;
+          }
+        }
+        return (blockedPosX.toString() + blockedPosY.toString() + blockedNegX.toString() + blockedNegY.toString());
+      }
+      
+      function isGameOver(){ 
+        if(endGame){
+          alowArrows = false;
+          nextScreen();
+          drawGB();
+        }
+      }
+      
+      function monsterAIMove(monsterNumber){ 
+        // monsterNumber sholud be passed in as a number
+        if(!holdMonster2x){ // holds the monster for 2 turns if true, works in conjunction with holdMonster2x
+          if(!holdMonster){// holds the monster for 1 turn if true
+            let moveDirection = pathFinder(monsterNumber);
+            if(moveDirection >= 5){ // move toward player
+              let rowsAway;
+              let colsAway;
+              if(monsterNumber == 1){
+                rowsAway = m1LocR - pcLocR;
+                colsAway = m1LocC - pcLocC;
+              }else if(monsterNumber == 2){
+                rowsAway = m2LocR - pcLocR;
+                colsAway = m2LocC - pcLocC;
+              }
+              if(rowsAway == colsAway ){
+                let blocking = findObstacles();
+                // this if statment finds what way to move the monster and avoids obstacles
+                if(blocking[0] == 1){ // Up is blocked
+                  if(blocking[1] == 2){ // Up,Right are blocked
+                    if(blocking[2] == 3){ // Up,Right,Down are blocked, not Left
+                      // move left #1
+                      canMove("m"+monsterNumber, "c", -1);
+                    }else{ // Up,Right,Left are blocked, not Down
+                      // move down #1
+                      canMove("m"+monsterNumber, "r", 1);
+                    }
+                  }else if(blocking[2] == 3){ // Up,Down are blocked, not Right
+                    if(blocking[3] == 4){ // Up,Down,Left are blocked, not Right
+                      // move right #1 
+                      canMove("m"+monsterNumber, "c", 1);
+                    }else{ // Up,Down are blocked, not Right, Left
+                      // move right or left
+                      // move left #2
+                      canMove("m"+monsterNumber, "c", -1);
+                    }
+                  }else if(blocking[3] == 4){// Up,Left are blocked, not Right,Down
+                    // move right or down
+                    // move down #2
+                    canMove("m"+monsterNumber, "r", 1);
+                  }
+                }else if(blocking[1] == 2){ // Right is blocked, not Up
+                  if(blocking[2] == 3){ // Right,Down are blocked , not Up
+                    if(blocking[3] == 4){ // Right,Down,Left are blocked , not Up
+                      // move up #1
+                      canMove("m"+monsterNumber, "r", -1);
+                    }
+                  }else if(blocking[3] == 4){ // Right,Left is blocked, not Up,Down
+                    // move up or down 
+                    // mode up #2
+                    canMove("m"+monsterNumber, "r", -1);
+                  }
+                }else if(blocking[2] == 3){ // Down is blocked, not Up,Right
+                  if(blocking[3] == 4){ // Down,Left are blocked, not Up,Right
+                    // move right or up
+                    // move right #2
+                    canMove("m"+monsterNumber, "c", 1);
+                  }else{ // Down are blcked, not Up,Right,Left
+                    // move up, right or left
+                    // move up #3
+                    canMove("m"+monsterNumber, "r", -1);
+                  }
+                }else if(blocking[3] == 4){ // Left is blocked, not Up,Right,Down
+                  // move up, right or down
+                  // move right #3
+                  canMove("m"+monsterNumber, "c", 1);
+                }
+              }else if(Math.abs(rowsAway) > Math.abs(colsAway)){ // move 1 column tile closer
+                if(rowsAway > 0){ // moves the monster up a row
+                  canMove("m"+monsterNumber.toString(), "r", -1);
+                }else if(rowsAway <= 0){ // moves the monster down a row
+                  canMove("m"+monsterNumber.toString(), "r", 1);
+                }
+              }else if(Math.abs(rowsAway) < Math.abs(colsAway)){ // move 1 row tile closer
+                if(colsAway > 0){ // moves the monster left a column
+                  canMove("m"+monsterNumber.toString(), "c", -1);
+                }else if(colsAway <= 0){ // moves the monster right a column
+                  canMove("m"+monsterNumber.toString(), "c", 1);
+                }
+              }
+            }else{
+              if(moveDirection == 1){ // -- // move up
+                canMove("m"+monsterNumber.toString(), "r", -1);
+              }else if(moveDirection == 2){ // move right
+                canMove("m"+monsterNumber.toString(), "c", 1);
+              }else if(moveDirection == 3){ // move down
+                canMove("m"+monsterNumber.toString(), "r", 1);
+              }else{// moveDirection == 4){ // move left
+                canMove("m"+monsterNumber.toString(), "c", -1);
+              }
+            }
+          }else{
+            holdMonster = false;
+          }
+        }else{
+          holdMonster2x = false;
+        }
+      }
+			
+			function keyHandler(event){ 
+        // listens for arrow keys to be pressed
+        if(alowArrows){ 
+          if(event.keyCode === 37){ //////// left column -1
+            runGame("pc", "c", -1); 
+          }else if(event.keyCode === 38){ // up row -1
+            runGame("pc", "r", -1);
+          }else if(event.keyCode === 39){ // right column +1
+            runGame("pc", "c", 1);
+          }else if(event.keyCode === 40){ // down row +1
+            runGame("pc", "r", 1);
+          }
+        }
+      }
+			
+    </script>
+  </body>
+</html>
